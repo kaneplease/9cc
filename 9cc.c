@@ -215,7 +215,7 @@ Node *unary() {
     if (consume('+'))
         return term();
     if (consume('-'))
-        return new_node(ND_SUB, new_node_num(0), term());
+        return new_node(ND_SUB, new_node_num(0), term());   // 0 - x という形にしてる
     return term();
 }
 
