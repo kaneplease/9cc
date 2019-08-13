@@ -149,7 +149,7 @@ Token *tokenize(char *p) {
             continue;
         }
 
-        if (*p == '+' || *p == '-') {
+        if (*p == '+' || *p == '-' || *p == '*' || *p == '/') {
             // インクリメント演算子を変数の後に付けた場合、変数の値を評価してから、変数の値に1を加えます。
             cur = new_token(TK_RESERVED, cur, p++);
             continue;
