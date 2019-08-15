@@ -118,7 +118,7 @@ void expect(char *op) {
     if (token->kind != TK_RESERVED ||
         strlen(op) != token->len ||
         memcmp(token->str, op, token->len)) // buf1 と buf2 を先頭から n バイト分比較します。
-        error_at(token->str, "'%s'ではありません", op);
+        error_at(token->str, "'%s'ではありません", *op);
     token = token->next;
 }
 
@@ -163,7 +163,7 @@ Token *tokenize(char *p) {
         }
 
         // 2文字演算子
-        if (memcmp(p, '==', 2) || memcmp(p, '!=', 2) || memcmp(p, '<=', 2) || memcmp(p, '>=', 2)){
+        if (strncmp(p, "==", 2) || strncmp(p, "!=", 2) || strncmp(p, "<=", 2) || strncmp(p, ">=", 2)){
             cur = new_token(TK_RESERVED, cur, p++, 2);
             p++;    // ２文字読み込んだので、２回インクリメント
             continue;
@@ -207,15 +207,16 @@ Node *new_node_num(int val) {
 
 Node *expr(){
     Node *node = equality();
+    return node;
 }
 
 Node *equality(){
     Node *node = relational();
 
     for (;;) {
-        if (consume('=='))
+        if (consume("=="))
             node = new_node(ND_EQ, node, relational());
-        else if (consume('!='))
+        else if (consume("!="))
             node = new_node(ND_NE, node, relational());
         else
             return node;
@@ -226,13 +227,13 @@ Node *relational(){
     Node *node = add();
 
     for (;;) {
-        if (consume('<='))
+        if (consume("<="))
             node = new_node(ND_LE, node, add());
-        else if (consume('<'))
+        else if (consume("<"))
             node = new_node(ND_LT, node, add());
-        else if (consume('>='))
+        else if (consume(">="))
             node = new_node(ND_LE, add(), node);
-        else if (consume('<'))
+        else if (consume("<"))
             node = new_node(ND_LT, add(), node);
         else
             return node;
@@ -243,9 +244,9 @@ Node *add () {
     Node *node = mul();
 
     for (;;) {
-        if (consume('+'))
+        if (consume("+"))
             node = new_node(ND_ADD, node, mul());
-        else if (consume('-'))
+        else if (consume("-"))
             node = new_node(ND_SUB, node, mul());
         else
             return node;
@@ -256,9 +257,9 @@ Node *mul() {
     Node *node = unary();
 
     for (;;) {
-        if (consume('*'))
+        if (consume("*"))
             node = new_node(ND_MUL, node, unary());
-        else if (consume('/'))
+        else if (consume("/"))
             node = new_node(ND_DIV, node, unary());
         else
             return node;
@@ -266,18 +267,18 @@ Node *mul() {
 }
 
 Node *unary() {
-    if (consume('+'))
+    if (consume("+"))
         return term();
-    if (consume('-'))
+    if (consume("-"))
         return new_node(ND_SUB, new_node_num(0), term());   // 0 - x という形にしてる
     return term();
 }
 
 Node *term() {
     // 次のトークンが"("なら、"(" add ")"のはず
-    if (consume('(')) {
+    if (consume("(")) {
         Node *node = add();
-        expect(')');
+        expect(")");
         return node;
     }
 
