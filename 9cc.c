@@ -163,7 +163,7 @@ Token *tokenize(char *p) {
         }
 
         // 2文字演算子
-        if (memcmp(*p, '==', 2) || memcmp(*p, '!=', 2) || memcmp(*p, '<=', 2) || memcmp(*p, '>=', 2)){
+        if (memcmp(p, '==', 2) || memcmp(p, '!=', 2) || memcmp(p, '<=', 2) || memcmp(p, '>=', 2)){
             cur = new_token(TK_RESERVED, cur, p++, 2);
             p++;    // ２文字読み込んだので、２回インクリメント
             continue;
