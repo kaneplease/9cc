@@ -166,6 +166,7 @@ Token *tokenize(char *p) {
         if (strncmp(p, "==", 2) || strncmp(p, "!=", 2) || strncmp(p, "<=", 2) || strncmp(p, ">=", 2)){
             cur = new_token(TK_RESERVED, cur, p++, 2);
             p++;    // ２文字読み込んだので、２回インクリメント
+            printf("2 mozi");
             continue;
         }
 
