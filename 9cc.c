@@ -164,9 +164,10 @@ Token *tokenize(char *p) {
 
         // 2文字演算子
         if (strncmp(p, "==", 2) || strncmp(p, "!=", 2) || strncmp(p, "<=", 2) || strncmp(p, ">=", 2)){
+            printf("%s", p);
+
             cur = new_token(TK_RESERVED, cur, p++, 2);
             p++;    // ２文字読み込んだので、２回インクリメント
-            printf("%s", *p);
             continue;
         }
 
