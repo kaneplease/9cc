@@ -6,6 +6,9 @@
 #include <string.h>
 #include "9cc.h"
 
+Token *token;    // 現在着目しているトークン
+char *user_input;    // 入力プログラム
+
 int main(int argc, char **argv) {
     if (argc != 2) {
         error("引数の個数が正しくありません");
