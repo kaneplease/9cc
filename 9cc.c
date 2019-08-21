@@ -18,7 +18,9 @@ int main(int argc, char **argv) {
 
     // トークナイズしてパースする
     user_input = argv[1];
+    printf("before_token");
     token = tokenize(user_input);
+    printf("before_program");
     program();
 
     // アセンブリの前半部分を出力

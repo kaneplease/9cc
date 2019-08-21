@@ -64,8 +64,10 @@ Token *consume_ident() {
         return NULL;
     //  一時的にtok_tmpにトークンを保存
     Token *tok_tmp = calloc(1, sizeof(Token));
+    printf("ident_0");
     tok_tmp->str = token->str;
     //  次のトークンへと読み進める
+    printf("ident_1");
     token = token->next;
     return tok_tmp;
 }
@@ -209,7 +211,6 @@ Node *primary () {
 
     Token *tok = consume_ident();
     if (tok) {
-        printf("varibles");
         Node *node = calloc(1, sizeof(Node));
         node->kind = ND_LVAR;
         node->offset = (tok->str[0] - 'a' + 1) * 8;
