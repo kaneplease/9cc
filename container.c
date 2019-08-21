@@ -12,12 +12,16 @@
 // プロトタイプ宣言 //
 Node *new_node(NodeKind kind, Node *lhs, Node *rhs);
 Node *new_node_num(int val);
+void program();
+Node *stmt();
+Node *expr();
 Node *equality();
+Node *assign();
 Node *relational();
 Node *add ();
 Node *mul();
 Node *unary();
-Node *term();
+Node *primary ();
 // 　宣言ここまで　 //
 
 // エラーを報告するための関数
@@ -53,6 +57,17 @@ bool consume(char *op) {
         return false;
     token = token->next;
     return true;
+}
+
+Token *consume_ident() {
+    if (token->kind != TK_IDENT)
+        return NULL;
+    //  一時的にtok_tmpにトークンを保存
+    Token *tok_tmp = calloc(1, sizeof(Token));
+    tok_tmp->str = token->str;
+    //  次のトークンへと読み進める
+    token = token->next;
+    return tok_tmp;
 }
 
 // 次のトークンが期待している記号のときには、トークンを1つ読み進める。
@@ -95,10 +110,30 @@ Node *new_node_num(int val) {
     return node;
 }
 
-Node *expr(){
-    Node *node = equality();
+void program() {
+    int i = 0;
+    while (!at_eof())
+        code[i++] = stmt();
+    code[i] = NULL;
+}
+
+Node *stmt() {
+    Node *node = expr();
+    expect(";");
     return node;
 }
+
+Node *expr() {
+    return assign();
+}
+
+Node *assign() {
+    Node *node = equality();
+    if (consume("="))
+        node = new_node(ND_ASSIGN, node, assign());
+    return node;
+}
+
 
 Node *equality(){
     Node *node = relational();
@@ -158,17 +193,25 @@ Node *mul() {
 
 Node *unary() {
     if (consume("+"))
-        return term();
+        return primary();
     if (consume("-"))
-        return new_node(ND_SUB, new_node_num(0), term());   // 0 - x という形にしてる
-    return term();
+        return new_node(ND_SUB, new_node_num(0), primary());   // 0 - x という形にしてる
+    return primary();
 }
 
-Node *term() {
+Node *primary () {
     // 次のトークンが"("なら、"(" add ")"のはず
     if (consume("(")) {
         Node *node = add();
         expect(")");
+        return node;
+    }
+
+    Token *tok = consume_ident();
+    if (tok) {
+        Node *node = calloc(1, sizeof(Node));
+        node->kind = ND_LVAR;
+        node->offset = (tok->str[0] - 'a' + 1) * 8;
         return node;
     }
 

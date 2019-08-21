@@ -51,6 +51,11 @@ Token *tokenize(char *p) {
             continue;
         }
 
+        if ('a' <= *p && *p <= 'z') {
+            cur = new_token(TK_IDENT, cur, p++, 1);
+            continue;
+        }
+
         if (isdigit(*p)) {
             cur = new_token(TK_NUM, cur, p, 1);
             cur->val = strtol(p, &p, 10);   // strtol()は第2引数のポインタをアップデートして、読み込んだ最後の文字の次の文字を指すように値を更新
