@@ -209,6 +209,7 @@ Node *primary () {
 
     Token *tok = consume_ident();
     if (tok) {
+        printf("varibles");
         Node *node = calloc(1, sizeof(Node));
         node->kind = ND_LVAR;
         node->offset = (tok->str[0] - 'a' + 1) * 8;
