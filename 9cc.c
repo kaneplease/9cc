@@ -11,7 +11,6 @@ char *user_input;    // 入力プログラム
 Node *code[100];
 
 int main(int argc, char **argv) {
-    printf("start");
     if (argc != 2) {
         error("引数の個数が正しくありません");
         return 1;
@@ -19,9 +18,7 @@ int main(int argc, char **argv) {
 
     // トークナイズしてパースする
     user_input = argv[1];
-    printf("before_token");
     token = tokenize(user_input);
-    printf("before_program");
     program();
 
     // アセンブリの前半部分を出力

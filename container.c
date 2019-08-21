@@ -78,7 +78,7 @@ void expect(char *op) {
     if (token->kind != TK_RESERVED ||
         strlen(op) != token->len ||
         memcmp(token->str, op, token->len)) // buf1 と buf2 を先頭から n バイト分比較します。
-        error_at(token->str, "'%s'ではありません", *op);
+        error_at(token->str, "'%s'ではありません", op);
     token = token->next;
 }
 
