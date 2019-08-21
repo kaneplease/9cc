@@ -11,6 +11,7 @@ char *user_input;    // 入力プログラム
 Node *code[100];
 
 int main(int argc, char **argv) {
+    printf("start");
     if (argc != 2) {
         error("引数の個数が正しくありません");
         return 1;
