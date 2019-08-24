@@ -25,7 +25,7 @@ Node *primary ();
 // 　宣言ここまで　 //
 
 //  グローバル変数　//
-LVar *locals;
+LVar *locals = NULL;
 //　ここまで　　　　//
 
 // エラーを報告するための関数
@@ -224,14 +224,15 @@ Node *primary () {
         node->kind = ND_LVAR;
 
         LVar *lvar = find_lvar(tok);
-        if (lvar) {
+        //  localsの中を検索して、今までに登場した変数ならoffsetをそのまま使う
+        if (lvar != NULL) {
             node->offset = lvar->offset;
-        } else {
+        } else {   //   ないなら新規にlocalsに登録、nodeのoffsetを与える
             lvar = calloc(1, sizeof(LVar));
             lvar->next = locals;
             lvar->name = tok->str;
             lvar->len = tok->len;
-            if (locals) {
+            if (locals != NULL) {
                 lvar->offset = locals->offset + 8;
             }else{
                 lvar->offset = 8;
