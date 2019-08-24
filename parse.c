@@ -51,8 +51,15 @@ Token *tokenize(char *p) {
             continue;
         }
 
+        //  変数名（a -> z）
         if ('a' <= *p && *p <= 'z') {
-            cur = new_token(TK_IDENT, cur, p++, 1);
+            char *var = p;  //  変数名
+            p++;
+            while('a' <= *p && *p <= 'z'){
+                var = strcat(var, p++);
+            }
+            int len = strlen(var);
+            cur = new_token(TK_IDENT, cur, var, len);
             continue;
         }
 
