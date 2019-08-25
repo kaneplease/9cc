@@ -9,6 +9,14 @@
 #include <string.h>
 #include "9cc.h"
 
+//  与えられた文字がトークンを構成する文字、すなわち英数字かアンダースコアかどうかを判定する関数
+int is_alnum(char c) {
+    return ('a' <= c && c <= 'z') ||
+           ('A' <= c && c <= 'Z') ||
+           ('0' <= c && c <= '9') ||
+           (c == '_');
+}
+
 // 新しいトークンを作成してcurに繋げる
 Token *new_token(TokenKind kind, Token *cur, char *str, int len) {
     Token *tok = calloc(1, sizeof(Token));
@@ -52,10 +60,10 @@ Token *tokenize(char *p) {
         }
 
         //  変数名（a -> z）
-        if ('a' <= *p && *p <= 'z') {
+        if (is_alnum(*p)) {
             char *init_p = p;     //  変数名
             p++;
-            while('a' <= *p && *p <= 'z'){
+            while(is_alnum(*p)){    //  is_alnum()で変数に使える文字を定義
                 p++;
             }
             int len = p - init_p;

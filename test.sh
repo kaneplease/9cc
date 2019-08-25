@@ -33,4 +33,5 @@ try 2 "a = 2;"
 try 3 "x = 3; x;"
 try 5 "a = 3;b = 3 * 3 - 5;a + b / 2;"
 try 6 "foo = 1; bar = 2+3; foo + bar;"
+try 6 "A_a = 2; A_b = (1+3)*2; A_b - A_a;"
 echo OK
