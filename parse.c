@@ -17,7 +17,7 @@ int is_alnum(char c) {
            (c == '_');
 }
 
-//  与えられた文字がトークンを構成する文字、すなわち英数字かアンダースコアかどうかを判定する関数
+//  与えられた文字がトークンを構成する文字、すなわち英字かアンダースコアかどうかを判定する関数（変数の頭文字の判定）
 int is_alnum_init(char c) {
     return ('a' <= c && c <= 'z') ||
            ('A' <= c && c <= 'Z') ||
@@ -47,6 +47,13 @@ Token *tokenize(char *p) {
         // 空白文字をスキップ
         if (isspace(*p)) {
             p++;
+            continue;
+        }
+
+        //  returnを判定
+        if (strncmp(p, "return", 6) == 0 && !is_alnum(p[6])){
+            cur = new_token(TK_RETURN, cur, p, 6);
+            p += 6;
             continue;
         }
 
