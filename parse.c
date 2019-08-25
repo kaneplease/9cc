@@ -67,10 +67,10 @@ Token *tokenize(char *p) {
         }
 
         //  変数名（a -> z）
-        if (is_alnum_init(*p)) {
+        if (is_alnum_init(*p)) {    //  変数の最初は数字が使えない
             char *init_p = p;     //  変数名
             p++;
-            while(is_alnum_init(*p)){    //  is_alnum()で変数に使える文字を定義
+            while(is_alnum(*p)){    //  is_alnum()で変数に使える文字を定義
                 p++;
             }
             int len = p - init_p;
