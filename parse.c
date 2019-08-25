@@ -53,13 +53,17 @@ Token *tokenize(char *p) {
 
         //  変数名（a -> z）
         if ('a' <= *p && *p <= 'z') {
-            char *var = p;  //  変数名
+            char *init_p = p;     //  変数名
             p++;
             while('a' <= *p && *p <= 'z'){
-                var = strcat(var, p++);
+                p++;
             }
-            int len = strlen(var);
+            int len = p - init_p;
+            char *var = NULL;
+            var = (char*)malloc(len+1); //  変数の長さは実行中に決まるので動的割付
+            strncpy(var, init_p, len);
             cur = new_token(TK_IDENT, cur, var, len);
+            //free(var);    //  解放してはいけない、ここに変数名が格納され、そのポインタを渡しているので、ここを解放すると未定義
             continue;
         }
 

@@ -25,7 +25,7 @@ Node *primary ();
 // 　宣言ここまで　 //
 
 //  グローバル変数　//
-LVar *locals = NULL;
+LVar *locals;
 //　ここまで　　　　//
 
 // エラーを報告するための関数
@@ -67,8 +67,8 @@ Token *consume_ident() {
     if (token->kind != TK_IDENT)
         return NULL;
     //  一時的にtok_tmpにトークンを保存
-    Token *tok_tmp = calloc(1, sizeof(Token));
-    tok_tmp->str = token->str;
+    Token *tok_tmp;
+    tok_tmp = token;
     //  次のトークンへと読み進める
     token = token->next;
     return tok_tmp;
@@ -213,7 +213,7 @@ Node *unary() {
 Node *primary () {
     // 次のトークンが"("なら、"(" add ")"のはず
     if (consume("(")) {
-        Node *node = add();
+        Node *node = expr();
         expect(")");
         return node;
     }
@@ -235,6 +235,7 @@ Node *primary () {
             if (locals != NULL) {
                 lvar->offset = locals->offset + 8;
             }else{
+                locals = calloc(1, sizeof(LVar));
                 lvar->offset = 8;
             }
             node->offset = lvar->offset;
